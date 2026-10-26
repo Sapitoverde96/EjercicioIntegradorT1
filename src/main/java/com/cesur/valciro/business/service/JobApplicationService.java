@@ -94,6 +94,25 @@ public class JobApplicationService {
     }
 
     /**
+     * Elimina una candidatura concreta con el identificador indicado.
+     *
+     * @param id el id de la candidatura a eliminar.
+     * @throws IdNotFoundException en el caso de que no exista una candidatura con ese identificador.
+     * @author Valentin Leyton Golla
+     * @since v1.0
+     */
+    public void delete(long id) {
+        find(id);
+        List<JobApplicationEntity> entities = repository.readFromCSV();
+        repository.clearFile();
+        for (JobApplicationEntity entity : entities) {
+            if (entity.id() != id) {
+                repository.saveToCSV(entity);
+            }
+        }
+    }
+
+    /**
      * Compara si el estado de la candidatura coincide con el estado que se está filtrando.
      *
      * @param entity candidatura a filtrar
