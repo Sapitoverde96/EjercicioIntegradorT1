@@ -38,7 +38,7 @@ public class JobApplicationRepository {
         try {
             Files.writeString(path, newLine, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         } catch (IOException exception) {
-            throw new RuntimeException("Ha ocurrido un error al leer el fichero");
+            throw new RuntimeException("Ha ocurrido un error al escribir el fichero");
         }
     }
 
