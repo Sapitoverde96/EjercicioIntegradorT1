@@ -1,5 +1,6 @@
 package com.cesur.valciro.business.service;
 
+import com.cesur.valciro.business.exception.IdNotFoundException;
 import com.cesur.valciro.business.exception.InvalidDateException;
 import com.cesur.valciro.data.entity.JobApplicationEntity;
 import com.cesur.valciro.data.entity.JobApplicationStatus;
@@ -71,6 +72,25 @@ public class JobApplicationService {
                 date);
         repository.saveToCSV(entity);
         return entity;
+    }
+
+    /**
+     * Muestra una candidatura concreta con el identificador indicado.
+     *
+     * @param id el id de la candidatura a mostrar.
+     * @return la candidatura con el identificador indicado.
+     * @throws IdNotFoundException en el caso de que no exista una candidatura con ese identificador.
+     * @author Ciro Alvarez
+     * @since v1.0
+     */
+    public JobApplicationEntity find(long id) {
+        List<JobApplicationEntity> entities = repository.readFromCSV();
+        for (JobApplicationEntity entity : entities) {
+            if (entity.id() == id) {
+                return entity;
+            }
+        }
+        throw new IdNotFoundException("No existe ninguna candidatura con el ID " + id);
     }
 
     /**
@@ -149,18 +169,5 @@ public class JobApplicationService {
             maxId = Math.max(maxId, entity.id());
         }
         return maxId + 1;
-    }
-
-    /**
-     * muestra la candidatura con el ID indicado.
-     *
-     * @throws IllegalArgumentException en el caso de que no exista.
-     */
-
-    public JobApplicationEntity view(long id) {
-        return repository.readFromCSV().stream()
-                .filter(e -> e.id() == id)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No existe ninguna candidatura con el ID " + id));
     }
 }
