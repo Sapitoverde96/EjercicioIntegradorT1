@@ -10,7 +10,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
-
 public class JobApplicationService {
     private static final DateTimeFormatter FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private final JobApplicationRepository repository;
@@ -53,14 +52,12 @@ public class JobApplicationService {
         }
     }
 
-
     /**
      * añade id a las candidaturas.
      *
      * @return la candidatura creada con su id.
      * @author Ciro Alvarez
      */
-
     public JobApplicationEntity add(String titulo, String empresa, String estado, String fecha) {
         if (titulo == null || empresa == null || estado == null || fecha == null) {
             throw new IllegalArgumentException(
@@ -91,7 +88,6 @@ public class JobApplicationService {
      * @return id unico para la candidatura creada
      * @author Ciro Alvarez
      */
-
     private long nextId() {
         if (!Files.exists(Path.of(filename))) {
             return 1;
@@ -101,7 +97,4 @@ public class JobApplicationService {
                 .max()
                 .orElse(0) + 1;
     }
-
-
-
 }
