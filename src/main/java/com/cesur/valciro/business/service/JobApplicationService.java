@@ -49,10 +49,14 @@ public class JobApplicationService {
     }
 
     /**
-     * añade id a las candidaturas.
-     *
-     * @return la candidatura creada con su id.
+     * Crea una nueva candidatura con un identificador único y las propiedades especificadas. Después la guarda en el fichero CSV.
+     * @param title el título de la candidatura.
+     * @param status el estado de la candidatura.
+     * @param company la empresa a la que se postula.
+     * @param date la fecha de la candidatura.
+     * @return la candidatura creada con su id y sus propiedades.
      * @author Ciro Alvarez
+     * @since v1.0
      */
     public JobApplicationEntity add(String title, String status, String company, String date) {
         checkField("title", title);
