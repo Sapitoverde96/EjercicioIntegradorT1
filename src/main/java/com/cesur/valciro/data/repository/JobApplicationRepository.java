@@ -1,0 +1,80 @@
+package com.cesur.valciro.data.repository;
+
+import com.cesur.valciro.business.exceptions.InvalidFileException;
+import com.cesur.valciro.data.entity.JobApplicationEntity;
+import com.cesur.valciro.data.entity.JobApplicationStatus;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+
+public class JobApplicationRepository {
+    private final String filename;
+
+    /**
+     * Constructor de la clase <code>JobApplicationRepository</code>.
+     *
+     * @param filename nombre del fichero que se va a leer.
+     * @author Valentin Leyton Golla
+     * @since v1.0
+     */
+    public JobApplicationRepository(String filename) {
+        this.filename = filename;
+    }
+
+    /**
+     * Lee un fichero CSV y devuelve una lista de objetos de clase <code>JobApplicationEntity</code> con los datos de cada línea.
+     *
+     * @return lista de objetos de clase <code>JobApplicationEntity</code> con los datos de cada línea del fichero CSV.
+     * @author Valentin Leyton Golla
+     * @since v1.0
+     */
+    public List<JobApplicationEntity> readFromCSV() {
+        filenameChecker(filename);
+        Path path = Path.of(filename);
+        List<JobApplicationEntity> output = new ArrayList<>();
+        try {
+            List<String> lines = Files.readAllLines(path);
+            lines.forEach(line -> output.add(jobApplicationFromCSV(line)));
+        } catch (IOException exception) {
+            throw new RuntimeException("Ha ocurrido un error al leer el fichero");
+        }
+        return output;
+    }
+
+    /**
+     * Comprueba que el nombre del fichero que se va a leer cumple con los requisitos
+     * @param filename nombre del fichero a leer.
+     * @throws InvalidFileException si el fichero no cumple con los requisitos, el mensaje depende del motivo del error.
+     * @author Valentin Leyton Golla
+     * @since v1.0
+     */
+    private void filenameChecker(String filename) {
+        if (filename == null) {
+            throw new InvalidFileException("El fichero no puede ser nulo");
+        }
+        if (!filename.endsWith(".csv")) {
+            throw new InvalidFileException("El fichero debe terminar en .csv");
+        }
+    }
+
+    /**
+     * Convierte una línea de un archivo CSV en un objeto de clase <code>JobApplicationEntity</code>
+     *
+     * @param line línea del archivo CSV a convertir.
+     * @return objeto de clase <code>JobApplicationEntity</code> con los datos de la línea.
+     * @author Valentin Leyton Golla
+     * @since v1.0
+     */
+    private JobApplicationEntity jobApplicationFromCSV(String line) {
+        String[] fields = line.split(",");
+        return new JobApplicationEntity(
+                Long.parseLong(fields[0]),
+                JobApplicationStatus.valueOf(fields[1].trim()),
+                fields[2],
+                fields[3]
+        );
+    }
+}
