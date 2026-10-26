@@ -1,6 +1,6 @@
 package com.cesur.valciro.data.repository;
 
-import com.cesur.valciro.business.exceptions.InvalidFileException;
+import com.cesur.valciro.business.exception.InvalidFileException;
 import com.cesur.valciro.data.entity.JobApplicationEntity;
 import com.cesur.valciro.data.entity.JobApplicationStatus;
 
