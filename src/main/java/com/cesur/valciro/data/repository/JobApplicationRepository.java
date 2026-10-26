@@ -87,7 +87,7 @@ public class JobApplicationRepository {
      * @since v1.0
      */
     private String jobApplicationToCSV(JobApplicationEntity entity) {
-        return entity.id() + "," + entity.title() + "," + entity.status() + "," + entity.company() + "," + entity.dateCreated();
+        return entity.id() + ";" + entity.title() + ";" + entity.status() + ";" + entity.company() + ";" + entity.dateCreated();
     }
 
     /**
@@ -99,7 +99,7 @@ public class JobApplicationRepository {
      * @since v1.0
      */
     private JobApplicationEntity jobApplicationFromCSV(String line) {
-        String[] fields = line.split(",");
+        String[] fields = line.split(";");
         return new JobApplicationEntity(
                 Long.parseLong(fields[0]),
                 fields[1],
