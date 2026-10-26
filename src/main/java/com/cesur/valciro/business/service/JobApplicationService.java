@@ -12,22 +12,19 @@ import java.util.List;
 
 
 public class JobApplicationService {
-        private static final DateTimeFormatter FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-    private final String filename;
+    private static final DateTimeFormatter FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private final JobApplicationRepository repository;
 
     /**
-     *  <code>filename</code> es el nombre del fichero CSV con los datos.
+     * Constructor de la clase <code>JobApplicationService</code>.
+     *
+     * @param repository repositorio de candidaturas que se utiliza para leer y escribir datos.
      * @author Ciro Álvarez
      * @since v1.0
      */
-
-    public JobApplicationService(String filename) {
-        this.filename = filename;
-        this.repository = new JobApplicationRepository(filename);
+    public JobApplicationService(JobApplicationRepository repository) {
+        this.repository = repository;
     }
-
 
     /**
      * Lista las candidaturas que se filtran por estado o empresa.
@@ -38,8 +35,6 @@ public class JobApplicationService {
      * @author Ciro Álvarez
      * @since v1.0
      */
-
-
     public List<JobApplicationEntity> list(String estado, String empresa) {
         JobApplicationStatus status = (estado == null) ? null : parseStatus(estado);
 
