@@ -150,4 +150,17 @@ public class JobApplicationService {
         }
         return maxId + 1;
     }
+
+    /**
+     * muestra la candidatura con el ID indicado.
+     *
+     * @throws IllegalArgumentException en el caso de que no exista.
+     */
+
+    public JobApplicationEntity view(long id) {
+        return repository.readFromCSV().stream()
+                .filter(e -> e.id() == id)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No existe ninguna candidatura con el ID " + id));
+    }
 }
