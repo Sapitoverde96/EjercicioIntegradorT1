@@ -7,6 +7,7 @@ import com.cesur.valciro.data.entity.JobApplicationStatus;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,23 @@ public class JobApplicationRepository {
      */
     public JobApplicationRepository(String filename) {
         this.filename = filename;
+    }
+
+    /**
+     * Guarda un objeto JobApplicationEntity en el archivo CSV.
+     * @param entity entidad de la clase <code>JobApplicationEntity</code> a añadir en el fichero CSV.
+     * @since v1.0
+     * @author Ciro Álvarez Garrido
+     * */
+    public void saveToCSV(JobApplicationEntity entity) {
+        filenameChecker(filename);
+        Path path = Path.of(filename);
+        String newLine = jobApplicationToCSV(entity) + System.lineSeparator();
+        try {
+            Files.writeString(path, newLine, StandardOpenOption.APPEND);
+        } catch (IOException exception) {
+            throw new RuntimeException("Ha ocurrido un error al leer el fichero");
+        }
     }
 
     /**
@@ -58,6 +76,18 @@ public class JobApplicationRepository {
         if (!filename.endsWith(".csv")) {
             throw new InvalidFileException("El fichero debe terminar en .csv");
         }
+    }
+
+    /**
+     * Convierte un objeto de clase <code>JobApplicationEntity</code> a una línea de texto en formato CSV
+     *
+     * @param entity objeto de JobApplicationEntity a convertir.
+     * @return línea CSV con los datos del objeto.
+     * @author Ciro Álvarez Garrido
+     * @since v1.0
+     */
+    private String jobApplicationToCSV(JobApplicationEntity entity) {
+        return entity.id() + "," + entity.title() + "," + entity.status() + "," + entity.company() + "," + entity.dateCreated();
     }
 
     /**
