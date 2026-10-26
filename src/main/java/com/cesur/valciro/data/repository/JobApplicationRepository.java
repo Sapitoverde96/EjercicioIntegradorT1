@@ -36,7 +36,7 @@ public class JobApplicationRepository {
         Path path = Path.of(filename);
         String newLine = jobApplicationToCSV(entity) + System.lineSeparator();
         try {
-            Files.writeString(path, newLine, StandardOpenOption.APPEND);
+            Files.writeString(path, newLine, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         } catch (IOException exception) {
             throw new RuntimeException("Ha ocurrido un error al leer el fichero");
         }
