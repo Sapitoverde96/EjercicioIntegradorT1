@@ -72,9 +72,10 @@ public class JobApplicationRepository {
         String[] fields = line.split(",");
         return new JobApplicationEntity(
                 Long.parseLong(fields[0]),
-                JobApplicationStatus.valueOf(fields[1].trim()),
-                fields[2],
-                fields[3]
+                fields[1],
+                JobApplicationStatus.valueOf(fields[2].trim()),
+                fields[3],
+                fields[4]
         );
     }
 }
