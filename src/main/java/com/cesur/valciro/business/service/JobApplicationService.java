@@ -1,4 +1,5 @@
 package com.cesur.valciro.business.service;
+
 import com.cesur.valciro.data.entity.JobApplicationEntity;
 import com.cesur.valciro.data.entity.JobApplicationStatus;
 import com.cesur.valciro.data.repository.JobApplicationRepository;
