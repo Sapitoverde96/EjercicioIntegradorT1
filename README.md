@@ -1,7 +1,7 @@
 # Ejercicio Integrador T1
-Creado por Valentin Leyton Golla y Ciro Álvarez Garrido. Alumnos de 2DAM, Grupo1.
+Creado por *Valentin Leyton Golla* y *Ciro Álvarez Garrido*. Alumnos de 2DAM, Grupo1.
 
----
+
 El siguiente proyecto es una aplicación de línea de comandos (CLI) para gestionar una lista de candidaturas correspondientes a varias empresas. Es posible listarlas, añadir nuevas, eliminar existentes e importarlas desde un archivo CSV.
 
 ## Requisitos
