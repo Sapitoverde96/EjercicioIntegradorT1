@@ -9,7 +9,10 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.cesur.valciro.data.entity.JobApplicationStatus.parseStatus;
 
 public class JobApplicationService {
     private static final DateTimeFormatter FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -27,30 +30,24 @@ public class JobApplicationService {
     }
 
     /**
-     * Lista las candidaturas que se filtran por estado o empresa.
+     * Filtra la lista las candidaturas mediante el <code>status</code> de la candidatura o la <code>company</code> a la que se postula.
      *
-     * @param  estado para filtrar por si puede ser null.
-     * @param empresa texto que debe contener la empresa.
-     * @return lista de candidaturas que cumplen los filtros.
+     * @param status filtra por el estado de la candidatura. Si es <code>null</code> no se filtra por estado.
+     * @param company filtra por la empresa a la que se postula. Si es <code>null</code> no se filtra por empresa.
+     * @return la lista de candidaturas que cumplen los filtros.
      * @author Ciro Álvarez
      * @since v1.0
      */
-    public List<JobApplicationEntity> list(String estado, String empresa) {
-        JobApplicationStatus status = (estado == null) ? null : parseStatus(estado);
-
-        return repository.readFromCSV().stream()
-                .filter(e -> status == null || e.status() == status)
-                .filter(e -> empresa == null || e.company().toLowerCase().contains(empresa.toLowerCase()))
-                .toList();
-    }
-
-    private JobApplicationStatus parseStatus(String text) {
-        try {
-            return JobApplicationStatus.valueOf(text.trim().toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(
-                    "Estado no válido: " + text + ". Valores aceptados: ACCEPTED, REJECTED, PENDING");
+    public List<JobApplicationEntity> list(String status, String company) {
+        JobApplicationStatus parsedStatus = parseStatus(status);
+        List<JobApplicationEntity> allJobApplications = repository.readFromCSV();
+        List<JobApplicationEntity> filteredJobApplications = new ArrayList<>();
+        for (JobApplicationEntity entity : allJobApplications) {
+            if (matchesStatus(entity, parsedStatus) && matchesCompany(entity, company)) {
+                filteredJobApplications.add(entity);
+            }
         }
+        return filteredJobApplications;
     }
 
     /**
@@ -73,6 +70,32 @@ public class JobApplicationService {
         JobApplicationEntity entity = new JobApplicationEntity(nextId(), titulo, status, empresa, fecha);
         repository.saveToCSV(entity);
         return entity;
+    }
+
+    /**
+     * Compara si el estado de la candidatura coincide con el estado que se está filtrando.
+     *
+     * @param entity candidatura a filtrar
+     * @param status estado a comparar
+     * @return true si coinciden, false en caso contrario.
+     * @author Valentin Leyton Golla
+     * @since v1.0
+     */
+    private boolean matchesStatus(JobApplicationEntity entity, JobApplicationStatus status) {
+        return status == null || entity.status() == status;
+    }
+
+    /**
+     * Compara si la empresa de la candidatura coincide con la empresa que se está filtrando.
+     *
+     * @param entity candidatura a filtrar
+     * @param company empresa a comparar
+     * @return true si coinciden, false en caso contrario.
+     * @author Valentin Leyton Golla
+     * @since v1.0
+     */
+    private boolean matchesCompany(JobApplicationEntity entity, String company) {
+        return company == null || entity.company() != null && entity.company().toLowerCase().contains(company.toLowerCase());
     }
 
     private void validateDate(String date) {
