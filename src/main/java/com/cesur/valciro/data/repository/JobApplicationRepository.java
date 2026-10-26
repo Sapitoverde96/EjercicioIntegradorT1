@@ -63,6 +63,22 @@ public class JobApplicationRepository {
     }
 
     /**
+     * Limpia el contenido existente del archivo CSV.
+     *
+     * @author Valentin Leyton Golla
+     * @since v1.0
+     */
+    public void clearFile() {
+        filenameChecker(filename);
+        Path path = Path.of(filename);
+        try {
+            Files.writeString(path, "", StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException exception) {
+            throw new RuntimeException("Error al eliminar el fichero", exception);
+        }
+    }
+
+    /**
      * Comprueba que el nombre del fichero que se va a leer cumple con los requisitos
      * @param filename nombre del fichero a leer.
      * @throws InvalidFileException si el fichero no cumple con los requisitos, el mensaje depende del motivo del error.
