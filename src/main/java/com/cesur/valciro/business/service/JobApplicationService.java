@@ -113,6 +113,27 @@ public class JobApplicationService {
     }
 
     /**
+     * Importa un fichero CSV con las candidaturas.
+     *
+     * @param externalCSV el fichero CSV a importar.
+     * @author Valentin Leyton Golla
+     * @since v1.0
+     */
+    public void importFile(String externalCSV) {
+        checkField("externalCSV", externalCSV);
+        List<JobApplicationEntity> importedEntities = repository.readFromCSV(externalCSV);
+        repository.clearFile();
+        for (JobApplicationEntity entity : importedEntities) {
+            this.add(
+                    entity.title(),
+                    entity.status().name(),
+                    entity.company(),
+                    entity.dateCreated()
+            );
+        }
+    }
+
+    /**
      * Compara si el estado de la candidatura coincide con el estado que se está filtrando.
      *
      * @param entity candidatura a filtrar
