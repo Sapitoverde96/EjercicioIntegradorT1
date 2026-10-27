@@ -32,8 +32,8 @@ public class JobApplicationRepository {
      * @author Ciro Álvarez Garrido
      * */
     public void saveToCSV(JobApplicationEntity entity) {
-        filenameChecker(filename);
-        Path path = Path.of(filename);
+        filenameChecker(this.filename);
+        Path path = Path.of(this.filename);
         String newLine = jobApplicationToCSV(entity) + System.lineSeparator();
         try {
             Files.writeString(path, newLine, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
@@ -43,13 +43,25 @@ public class JobApplicationRepository {
     }
 
     /**
-     * Lee un fichero CSV y devuelve una lista de objetos de clase <code>JobApplicationEntity</code> con los datos de cada línea.
+     * Lee el fichero CSV predeterminado y devuelve una lista de objetos de clase <code>JobApplicationEntity</code> con los datos de cada línea.
      *
      * @return lista de objetos de clase <code>JobApplicationEntity</code> con los datos de cada línea del fichero CSV.
      * @author Valentin Leyton Golla
      * @since v1.0
      */
     public List<JobApplicationEntity> readFromCSV() {
+        return readFromCSV(this.filename);
+    }
+
+    /**
+     * Lee un fichero CSV cualquiera y devuelve una lista de objetos de clase <code>JobApplicationEntity</code> con los datos de cada línea.
+     *
+     * @param filename nombre del fichero CSV a leer.
+     * @return lista de objetos de clase <code>JobApplicationEntity</code> con los datos de cada línea del fichero CSV.
+     * @author Valentin Leyton Golla
+     * @since v1.0
+     */
+    public List<JobApplicationEntity> readFromCSV(String filename) {
         filenameChecker(filename);
         Path path = Path.of(filename);
         List<JobApplicationEntity> output = new ArrayList<>();
@@ -69,8 +81,8 @@ public class JobApplicationRepository {
      * @since v1.0
      */
     public void clearFile() {
-        filenameChecker(filename);
-        Path path = Path.of(filename);
+        filenameChecker(this.filename);
+        Path path = Path.of(this.filename);
         try {
             Files.writeString(path, "", StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException exception) {
