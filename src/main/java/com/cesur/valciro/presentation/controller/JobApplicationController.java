@@ -32,9 +32,8 @@ public class JobApplicationController {
         }
         String argument = arguments[0].toLowerCase();
         switch (argument) {
-            case "listar"-> {
-                executeList(arguments);
-            }
+            case "listar"-> executeList(arguments);
+            case "añadir" -> executeAdd(arguments);
             default -> {
                 System.err.println(ConsoleStatus.ERROR + " no se reconoce como un comando.");
             }
@@ -87,5 +86,53 @@ public class JobApplicationController {
                     entity.id(), entity.title(), entity.status(), entity.company(), entity.dateCreated()
             );
         }
+    }
+
+    private void executeAdd(String[] arguments) {
+        String title = null;
+        String status = null;
+        String company = null;
+        String date = null;
+        for (int arg = 1; arg < arguments.length; arg++) {
+            String argument = arguments[arg];
+            if (argument.equalsIgnoreCase("--titulo")) {
+                if (arg + 1 < arguments.length) {
+                    title = arguments[arg + 1];
+                    arg++;
+                } else {
+                    System.err.println(ConsoleStatus.WARNING + " \"--titulo\" se ha introducido sin valor.");
+                    return;
+                }
+            } else if (argument.equalsIgnoreCase("--estado")) {
+                if (arg + 1 < arguments.length) {
+                    status = arguments[arg + 1];
+                    arg++;
+                } else {
+                    System.err.println(ConsoleStatus.WARNING + " \"--estado\" se ha introducido sin valor.");
+                    return;
+                }
+            } else if (argument.equalsIgnoreCase("--empresa")) {
+                if (arg + 1 < arguments.length) {
+                    company = arguments[arg + 1];
+                    arg++;
+                } else {
+                    System.err.println(ConsoleStatus.WARNING + " \"--empresa\" se ha introducido sin valor.");
+                    return;
+                }
+            } else if (argument.equalsIgnoreCase("--fecha")) {
+                if (arg + 1 < arguments.length) {
+                    date = arguments[arg + 1];
+                    arg++;
+                } else {
+                    System.err.println(ConsoleStatus.WARNING + " \"--fecha\" se ha introducido sin valor.");
+                    return;
+                }
+            } else {
+                System.err.println(ConsoleStatus.ERROR + " no se reconoce como un argumento.");
+                return;
+            }
+        }
+        service.add(title, status, company, date);
+        System.out.println(ConsoleStatus.INFO + " La candidatura se ha añadido correctamente.");
     }
 }
