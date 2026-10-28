@@ -133,13 +133,17 @@ public class JobApplicationRepository {
      * @since v1.0
      */
     private JobApplicationEntity jobApplicationFromCSV(String line) {
-        String[] fields = line.split(";");
+        String[] fields = line.split(";", -1);
+        String company = fields[3].trim();
+        if (company.isEmpty()) {
+            company = null;
+        }
         return new JobApplicationEntity(
                 Long.parseLong(fields[0]),
-                fields[1],
-                JobApplicationStatus.valueOf(fields[2].trim()),
-                fields[3],
-                fields[4]
+                fields[1].trim(),
+                JobApplicationStatus.parseStatus(fields[2].trim()),
+                company,
+                fields[4].trim()
         );
     }
 }
