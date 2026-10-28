@@ -115,7 +115,13 @@ public class JobApplicationRepository {
      * @since v1.0
      */
     private String jobApplicationToCSV(JobApplicationEntity entity) {
-        return entity.id() + ";" + entity.title() + ";" + entity.status() + ";" + entity.company() + ";" + entity.dateCreated();
+        String company;
+        if (entity.company() == null) {
+            company = "";
+        } else {
+            company = entity.company();
+        }
+        return entity.id() + ";" + entity.title() + ";" + entity.status().name() + ";" + company + ";" + entity.dateCreated();
     }
 
     /**
