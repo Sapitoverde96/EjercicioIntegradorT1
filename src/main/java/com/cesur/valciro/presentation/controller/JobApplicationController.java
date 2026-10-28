@@ -8,6 +8,11 @@ import java.util.List;
 public class JobApplicationController {
     private final JobApplicationService service;
 
+    private static final String TITLE = "--titulo";
+    private static final String STATUS = "--estado";
+    private static final String COMPANY = "--empresa";
+    private static final String DATE = "--fecha";
+
     /**
      * Constructor de la clase <code>JobApplicationController</code>.
      *
@@ -49,90 +54,93 @@ public class JobApplicationController {
      * @author Valentin Leyton Golla
      * @since v1.0
      */
-    private void executeList(String[] arguments) {
+    private void executeList(String[] arguments) throws IllegalArgumentException {
         String statFilter = null;
         String compFilter = null;
-        for (int arg = 1; arg < arguments.length; arg++) {
-            String argument = arguments[arg];
-            if (argument.equalsIgnoreCase("--estado")) {
-                if (arg + 1 < arguments.length) {
-                    statFilter = arguments[arg + 1];
-                    arg++;
+        try {
+            for (int currentArgument = 1; currentArgument < arguments.length; currentArgument++) {
+                String argument = arguments[currentArgument];
+                if (argument.equalsIgnoreCase(STATUS)) {
+                    statFilter = getArgumentValue(arguments, currentArgument, STATUS);
+                    currentArgument++;
+                } else if (argument.equalsIgnoreCase(COMPANY)) {
+                    compFilter = getArgumentValue(arguments, currentArgument, COMPANY);
+                    currentArgument++;
                 } else {
-                    System.err.println(ConsoleStatus.WARNING + " \"--estado\" se ha introducido sin valor.");
+                    System.err.println(ConsoleStatus.ERROR + " \"" + argument + "\" no se reconoce como un argumento.");
                     return;
                 }
-            } else if (argument.equalsIgnoreCase("--empresa")) {
-                if (arg + 1 < arguments.length) {
-                    compFilter = arguments[arg + 1];
-                    arg++;
-                } else {
-                    System.err.println(ConsoleStatus.WARNING + " \"--empresa\" se ha introducido sin valor.");
-                    return;
-                }
-            } else {
-                System.err.println(ConsoleStatus.ERROR + " no se reconoce como un argumento.");
+            }
+            List<JobApplicationEntity> entities = service.list(statFilter, compFilter);
+            if (entities.isEmpty()) {
+                System.out.println(ConsoleStatus.ERROR + " No se han encontrado candidaturas.");
                 return;
             }
-        }
-        List<JobApplicationEntity> entities = service.list(statFilter, compFilter);
-        if (entities.isEmpty()) {
-            System.out.println(ConsoleStatus.WARNING + " No se han encontrado candidaturas.");
-            return;
-        }
-        for (JobApplicationEntity entity : entities) {
-            System.out.printf(
-                    "╭ Candidatura ID: %s\n│ ╭ Título: %s\n│ │ Estado: %s\n│ │ Empresa: %s\n│ ╰ Fecha: %s\n",
-                    entity.id(), entity.title(), entity.status(), entity.company(), entity.dateCreated()
-            );
+            for (JobApplicationEntity entity : entities) {
+                System.out.printf(
+                        "╭ Candidatura ID: %s\n│ ╭ Título: %s\n│ │ Estado: %s\n│ │ Empresa: %s\n│ ╰ Fecha: %s\n",
+                        entity.id(), entity.title(), entity.status(), entity.company(), entity.dateCreated()
+                );
+            }
+        } catch (IllegalArgumentException exception) {
+            System.err.println(exception.getMessage());
         }
     }
 
-    private void executeAdd(String[] arguments) {
+    /**
+     * Esta función ejecuta el comando "add" para añadir una nueva candidatura.
+     *
+     * @param arguments el array de argumentos de la línea de comandos.
+     * @author Valentin Leyton Golla
+     * @since v1.0
+     */
+    private void executeAdd(String[] arguments) throws IllegalArgumentException {
         String title = null;
         String status = null;
         String company = null;
         String date = null;
-        for (int arg = 1; arg < arguments.length; arg++) {
-            String argument = arguments[arg];
-            if (argument.equalsIgnoreCase("--titulo")) {
-                if (arg + 1 < arguments.length) {
-                    title = arguments[arg + 1];
-                    arg++;
+        try {
+            for (int currentArgument = 1; currentArgument < arguments.length; currentArgument++) {
+                String argument = arguments[currentArgument];
+                if (argument.equalsIgnoreCase(TITLE)) {
+                    title = getArgumentValue(arguments, currentArgument, TITLE);
+                    currentArgument++;
+                } else if (argument.equalsIgnoreCase(STATUS)) {
+                    status = getArgumentValue(arguments, currentArgument, STATUS);
+                    currentArgument++;
+                } else if (argument.equalsIgnoreCase(COMPANY)) {
+                    company = getArgumentValue(arguments, currentArgument, COMPANY);
+                    currentArgument++;
+                } else if (argument.equalsIgnoreCase(DATE)) {
+                    date = getArgumentValue(arguments, currentArgument, DATE);
+                    currentArgument++;
                 } else {
-                    System.err.println(ConsoleStatus.WARNING + " \"--titulo\" se ha introducido sin valor.");
+                    System.err.println(ConsoleStatus.ERROR + " \"" + argument + "\" no se reconoce como un argumento.");
                     return;
                 }
-            } else if (argument.equalsIgnoreCase("--estado")) {
-                if (arg + 1 < arguments.length) {
-                    status = arguments[arg + 1];
-                    arg++;
-                } else {
-                    System.err.println(ConsoleStatus.WARNING + " \"--estado\" se ha introducido sin valor.");
-                    return;
-                }
-            } else if (argument.equalsIgnoreCase("--empresa")) {
-                if (arg + 1 < arguments.length) {
-                    company = arguments[arg + 1];
-                    arg++;
-                } else {
-                    System.err.println(ConsoleStatus.WARNING + " \"--empresa\" se ha introducido sin valor.");
-                    return;
-                }
-            } else if (argument.equalsIgnoreCase("--fecha")) {
-                if (arg + 1 < arguments.length) {
-                    date = arguments[arg + 1];
-                    arg++;
-                } else {
-                    System.err.println(ConsoleStatus.WARNING + " \"--fecha\" se ha introducido sin valor.");
-                    return;
-                }
-            } else {
-                System.err.println(ConsoleStatus.ERROR + " no se reconoce como un argumento.");
-                return;
             }
+            service.add(title, status, company, date);
+            System.out.println(ConsoleStatus.INFO + " La candidatura se ha añadido correctamente.");
+        } catch (IllegalArgumentException exception) {
+            System.err.println(exception.getMessage());
         }
-        service.add(title, status, company, date);
-        System.out.println(ConsoleStatus.INFO + " La candidatura se ha añadido correctamente.");
+    }
+
+    /**
+     * Esta función obtiene el valor que le pertenece a un argumento de la línea de comandos.
+     *
+     * @param arguments el array de argumentos de la línea de comandos.
+     * @param currentArgument el índice del argumento actual.
+     * @param argumentName el nombre del argumento.
+     * @return el valor del argumento.
+     * @throws IllegalArgumentException si el argumento no tiene valor.
+     * @author Valentin Leyton Golla
+     * @since v1.0
+     */
+    private String getArgumentValue(String[] arguments, int currentArgument, String argumentName) {
+        if (currentArgument + 1 < arguments.length) {
+            return arguments[currentArgument + 1];
+        }
+        throw new IllegalArgumentException(ConsoleStatus.WARNING + "\"" + argumentName + "\" se ha introducido sin valor.");
     }
 }
