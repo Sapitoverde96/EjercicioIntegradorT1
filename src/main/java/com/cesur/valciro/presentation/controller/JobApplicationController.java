@@ -54,7 +54,7 @@ public class JobApplicationController {
      * @author Valentin Leyton Golla
      * @since v1.0
      */
-    private void executeList(String[] arguments) throws IllegalArgumentException {
+    private void executeList(String[] arguments) {
         String statFilter = null;
         String compFilter = null;
         try {
@@ -94,7 +94,7 @@ public class JobApplicationController {
      * @author Valentin Leyton Golla
      * @since v1.0
      */
-    private void executeAdd(String[] arguments) throws IllegalArgumentException {
+    private void executeAdd(String[] arguments) {
         String title = null;
         String status = null;
         String company = null;
@@ -124,6 +124,10 @@ public class JobApplicationController {
         } catch (IllegalArgumentException exception) {
             System.err.println(exception.getMessage());
         }
+    }
+
+    private void executeFind(String[] arguments) {
+
     }
 
     /**
