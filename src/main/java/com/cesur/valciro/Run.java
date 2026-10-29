@@ -25,7 +25,7 @@ public class Run {
             JobApplicationController controller = new JobApplicationController(service);
             controller.readArguments(args);
         } catch (Exception exception) {
-            System.out.println(ConsoleStatus.ERROR + " Fallo crítico al iniciar la aplicación");
+            System.out.println("[" + ConsoleStatus.ERROR + "] Fallo crítico al iniciar la aplicación");
         }
     }
 }

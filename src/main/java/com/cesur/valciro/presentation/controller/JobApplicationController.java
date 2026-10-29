@@ -43,7 +43,7 @@ public class JobApplicationController {
             case "ver" -> executeFind(arguments);
             case "borrar" -> executeDelete(arguments);
             case "importar" -> executeImport(arguments);
-            default -> System.err.println(ConsoleStatus.ERROR + " no se reconoce como un comando.");
+            default -> System.err.println("[" + ConsoleStatus.ERROR + "] no se reconoce como un comando.");
         }
     }
 
@@ -69,13 +69,13 @@ public class JobApplicationController {
                     compFilter = getArgumentValue(arguments, currentArgument, COMPANY);
                     currentArgument++;
                 } else {
-                    System.err.println(ConsoleStatus.ERROR + " \"" + argument + "\" no se reconoce como un argumento.");
+                    System.err.println("[" + ConsoleStatus.ERROR + "] \"" + argument + "\" no se reconoce como un argumento.");
                     return;
                 }
             }
             List<JobApplicationEntity> entities = service.list(statFilter, compFilter);
             if (entities.isEmpty()) {
-                System.out.println(ConsoleStatus.ERROR + " No se han encontrado candidaturas.");
+                System.out.println("[" + ConsoleStatus.ERROR + "] No se han encontrado candidaturas.");
                 return;
             }
             for (JobApplicationEntity entity : entities) {
@@ -117,12 +117,12 @@ public class JobApplicationController {
                     date = getArgumentValue(arguments, currentArgument, DATE);
                     currentArgument++;
                 } else {
-                    System.err.println(ConsoleStatus.ERROR + " \"" + argument + "\" no se reconoce como un argumento.");
+                    System.err.println("[" + ConsoleStatus.ERROR + "] \"" + argument + "\" no se reconoce como un argumento.");
                     return;
                 }
             }
             service.add(title, status, company, date);
-            System.out.println(ConsoleStatus.INFO + " La candidatura se ha añadido correctamente.");
+            System.out.println("[" + ConsoleStatus.INFO + "] La candidatura se ha añadido correctamente.");
         } catch (IllegalArgumentException exception) {
             System.err.println(exception.getMessage());
         }
@@ -142,7 +142,7 @@ public class JobApplicationController {
             try {
                 parsedId = Long.parseLong(id);
             } catch (NumberFormatException exception) {
-                System.err.println(ConsoleStatus.ERROR + " El valor del argumento \"" + id + "\" no es un número válido.");
+                System.err.println("[" + ConsoleStatus.ERROR + "] El valor del argumento \"" + id + "\" no es un número válido.");
                 return;
             }
             JobApplicationEntity entity = service.find(parsedId);
@@ -153,7 +153,7 @@ public class JobApplicationController {
         } catch (IllegalArgumentException exception) {
             System.err.println(exception.getMessage());
         } catch (IdNotFoundException exception) {
-            System.err.println(ConsoleStatus.ERROR + " " + exception.getMessage());
+            System.err.println("[" + ConsoleStatus.ERROR + "] " + exception.getMessage());
         }
     }
 
@@ -171,15 +171,15 @@ public class JobApplicationController {
             try {
                 parsedId = Long.parseLong(id);
             } catch (NumberFormatException exception) {
-                System.err.println(ConsoleStatus.ERROR + " El valor del argumento \"" + id + "\" no es un número válido.");
+                System.err.println("[" + ConsoleStatus.ERROR + "] El valor del argumento \"" + id + "\" no es un número válido.");
                 return;
             }
             service.delete(parsedId);
-            System.out.println(ConsoleStatus.INFO + " La candidatura con identificador \"" + parsedId + "\" ha sido eliminada.");
+            System.out.println("[" + ConsoleStatus.INFO + "] La candidatura con identificador \"" + parsedId + "\" ha sido eliminada.");
         } catch (IllegalArgumentException exception) {
             System.err.println(exception.getMessage());
         } catch (IdNotFoundException exception) {
-            System.err.println(ConsoleStatus.ERROR + " " + exception.getMessage());
+            System.err.println("[" + ConsoleStatus.ERROR + "] " + exception.getMessage());
         }
     }
 
@@ -194,11 +194,11 @@ public class JobApplicationController {
         try {
             String fileCSV = getArgumentValue(arguments, 0, "import");
             service.importFile(fileCSV);
-            System.out.println(ConsoleStatus.INFO + " El fichero \"" + fileCSV + "\" se ha importado correctamente.");
+            System.out.println("[" + ConsoleStatus.INFO + "] El fichero \"" + fileCSV + "\" se ha importado correctamente.");
         } catch (IllegalArgumentException exception) {
             System.err.println(exception.getMessage());
         } catch (RuntimeException exception) {
-            System.err.println(ConsoleStatus.ERROR + " " + exception.getMessage());
+            System.err.println("[" + ConsoleStatus.ERROR + "] " + exception.getMessage());
         }
     }
 
@@ -217,6 +217,6 @@ public class JobApplicationController {
         if (currentArgument + 1 < arguments.length) {
             return arguments[currentArgument + 1];
         }
-        throw new IllegalArgumentException(ConsoleStatus.WARNING + "\"" + argumentName + "\" se ha introducido sin valor.");
+        throw new IllegalArgumentException("[" + ConsoleStatus.WARNING + "] \"" + argumentName + "\" se ha introducido sin valor.");
     }
 }
