@@ -184,6 +184,25 @@ public class JobApplicationController {
     }
 
     /**
+     * Esta función permite importar un fichero CSV cualquiera con candidaturas.
+     *
+     * @param arguments los argumentos del comando.
+     * @author Ciro Álvarez Garrido
+     * @since v1.0
+     */
+    private void executeImport(String[] arguments) {
+        try {
+            String fileCSV = getArgumentValue(arguments, 0, "import");
+            service.importFile(fileCSV);
+            System.out.println(ConsoleStatus.INFO + " El fichero \"" + fileCSV + "\" se ha importado correctamente.");
+        } catch (IllegalArgumentException exception) {
+            System.err.println(exception.getMessage());
+        } catch (RuntimeException exception) {
+            System.err.println(ConsoleStatus.ERROR + " " + exception.getMessage());
+        }
+    }
+
+    /**
      * Esta función obtiene el valor que le pertenece a un argumento de la línea de comandos.
      *
      * @param arguments el array de argumentos de la línea de comandos.
