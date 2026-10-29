@@ -1,5 +1,6 @@
 package com.cesur.valciro.presentation.controller;
 
+import com.cesur.valciro.business.exception.DuplicateJobApplicationException;
 import com.cesur.valciro.business.exception.IdNotFoundException;
 import com.cesur.valciro.business.service.JobApplicationService;
 import com.cesur.valciro.data.entity.JobApplicationEntity;
@@ -123,8 +124,8 @@ public class JobApplicationController {
             }
             service.add(title, status, company, date);
             System.out.println("[" + ConsoleStatus.INFO + "] La candidatura se ha añadido correctamente.");
-        } catch (IllegalArgumentException exception) {
-            System.err.println(exception.getMessage());
+        } catch (IllegalArgumentException | DuplicateJobApplicationException exception) {
+            System.err.println("[" + ConsoleStatus.ERROR + "] " + exception.getMessage());
         }
     }
 

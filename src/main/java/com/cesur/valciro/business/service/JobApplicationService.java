@@ -1,5 +1,6 @@
 package com.cesur.valciro.business.service;
 
+import com.cesur.valciro.business.exception.DuplicateJobApplicationException;
 import com.cesur.valciro.business.exception.IdNotFoundException;
 import com.cesur.valciro.business.exception.InvalidDateException;
 import com.cesur.valciro.data.entity.JobApplicationEntity;
@@ -56,6 +57,7 @@ public class JobApplicationService {
      * @param company la empresa a la que se postula.
      * @param date la fecha de la candidatura.
      * @return la candidatura creada con su id y sus propiedades.
+     * @throws DuplicateJobApplicationException si ya existe una candidatura con el mismo título, estado, empresa y fecha.
      * @author Ciro Alvarez
      * @since v1.0
      */
@@ -64,6 +66,15 @@ public class JobApplicationService {
         checkField("status", status);
         checkField("company", company);
         checkDate(date);
+        List<JobApplicationEntity> entities = repository.readFromCSV();
+        for (JobApplicationEntity entity : entities) {
+            if(entity.title().equalsIgnoreCase(title) &&
+            entity.status().name().equalsIgnoreCase(status) &&
+            entity.company().equalsIgnoreCase(company) &&
+            entity.dateCreated().equalsIgnoreCase(date)) {
+                throw new DuplicateJobApplicationException("Ya existe una candidatura con ese titulo, estado, empresa y fecha");
+            }
+        }
         JobApplicationEntity entity = new JobApplicationEntity(
                 generateNewId(),
                 title,
