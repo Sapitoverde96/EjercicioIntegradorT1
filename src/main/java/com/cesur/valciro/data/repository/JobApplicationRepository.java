@@ -65,6 +65,9 @@ public class JobApplicationRepository {
         filenameChecker(filename);
         Path path = Path.of(filename);
         List<JobApplicationEntity> output = new ArrayList<>();
+        if (!Files.exists(path)) {
+            return output;
+        }
         try {
             List<String> lines = Files.readAllLines(path);
             lines.forEach(line -> output.add(jobApplicationFromCSV(line)));
