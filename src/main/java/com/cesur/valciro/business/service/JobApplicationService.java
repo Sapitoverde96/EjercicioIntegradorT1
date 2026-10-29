@@ -6,6 +6,7 @@ import com.cesur.valciro.business.exception.InvalidDateException;
 import com.cesur.valciro.data.entity.JobApplicationEntity;
 import com.cesur.valciro.data.entity.JobApplicationStatus;
 import com.cesur.valciro.data.repository.JobApplicationRepository;
+import com.cesur.valciro.data.repository.ConfigRepository;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -17,6 +18,7 @@ import static com.cesur.valciro.data.entity.JobApplicationStatus.parseStatus;
 
 public class JobApplicationService {
     private final JobApplicationRepository repository;
+    private final ConfigRepository configRepository;
 
     /**
      * Constructor de la clase <code>JobApplicationService</code>.
@@ -25,8 +27,9 @@ public class JobApplicationService {
      * @author Ciro Álvarez
      * @since v1.0
      */
-    public JobApplicationService(JobApplicationRepository repository) {
+    public JobApplicationService(JobApplicationRepository repository, ConfigRepository configRepository) {
         this.repository = repository;
+        this.configRepository = configRepository;
     }
 
     /**
@@ -131,17 +134,9 @@ public class JobApplicationService {
      * @since v1.0
      */
     public void importFile(String externalCSV) {
-        checkField("externalCSV", externalCSV);
-        List<JobApplicationEntity> importedEntities = repository.readFromCSV(externalCSV);
-        repository.clearFile();
-        for (JobApplicationEntity entity : importedEntities) {
-            this.add(
-                    entity.title(),
-                    entity.status().name(),
-                    entity.company(),
-                    entity.dateCreated()
-            );
-        }
+        checkField("fichero CSV", externalCSV);
+        configRepository.setCSV(externalCSV);
+        repository.change(externalCSV);
     }
 
     /**

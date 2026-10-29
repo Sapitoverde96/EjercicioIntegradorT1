@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JobApplicationRepository {
-    private final String filename;
+    private String filename;
 
     /**
      * Constructor de la clase <code>JobApplicationRepository</code>.
@@ -22,6 +22,11 @@ public class JobApplicationRepository {
      * @since v1.0
      */
     public JobApplicationRepository(String filename) {
+        this.filename = filename;
+    }
+
+    public void change(String filename) {
+        filenameChecker(filename);
         this.filename = filename;
     }
 

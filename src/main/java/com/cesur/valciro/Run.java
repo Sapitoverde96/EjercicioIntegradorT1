@@ -1,5 +1,6 @@
 package com.cesur.valciro;
 import com.cesur.valciro.business.service.JobApplicationService;
+import com.cesur.valciro.data.repository.ConfigRepository;
 import com.cesur.valciro.data.repository.JobApplicationRepository;
 import com.cesur.valciro.presentation.controller.ConsoleStatus;
 import com.cesur.valciro.presentation.controller.JobApplicationController;
@@ -18,10 +19,11 @@ public class Run {
      * @version v1.0
      */
     public static void main(String[] args) {
-        String defaultFile = "candidaturas.csv";
+        ConfigRepository config = new ConfigRepository("config.txt");
+        String file = config.getCSV();
         try {
-            JobApplicationRepository repository = new JobApplicationRepository(defaultFile);
-            JobApplicationService service = new JobApplicationService(repository);
+            JobApplicationRepository repository = new JobApplicationRepository(file);
+            JobApplicationService service = new JobApplicationService(repository, config);
             JobApplicationController controller = new JobApplicationController(service);
             controller.readArguments(args);
         } catch (Exception exception) {
