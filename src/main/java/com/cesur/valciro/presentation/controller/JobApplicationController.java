@@ -80,7 +80,7 @@ public class JobApplicationController {
             }
             for (JobApplicationEntity entity : entities) {
                 System.out.printf(
-                        "╭ Candidatura ID: %s\n│ ╭ Título: %s\n│ │ Estado: %s\n│ │ Empresa: %s\n│ ╰ Fecha: %s\n",
+                        "│ Candidatura ID: %s\n│ │ Título: %s\n│ │ Estado: %s\n│ │ Empresa: %s\n│ │ Fecha: %s\n",
                         entity.id(), entity.title(), entity.status(), entity.company(), entity.dateCreated()
                 );
             }
@@ -147,7 +147,7 @@ public class JobApplicationController {
             }
             JobApplicationEntity entity = service.find(parsedId);
             System.out.printf(
-                    "╭ Candidatura ID: %s\n│ ╭ Título: %s\n│ │ Estado: %s\n│ │ Empresa: %s\n│ ╰ Fecha: %s\n",
+                    "│ Candidatura ID: %s\n│ │ Título: %s\n│ │ Estado: %s\n│ │ Empresa: %s\n│ │ Fecha: %s\n",
                     entity.id(), entity.title(), entity.status(), entity.company(), entity.dateCreated()
             );
         } catch (IllegalArgumentException exception) {
