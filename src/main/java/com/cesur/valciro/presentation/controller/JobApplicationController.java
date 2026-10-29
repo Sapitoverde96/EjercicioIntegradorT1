@@ -158,6 +158,32 @@ public class JobApplicationController {
     }
 
     /**
+     * Esta función permite eliminar una candidatura concreta específica del archivo CSV usando un identificador a elección del usuario.
+     *
+     * @param arguments los argumentos del comando.
+     * @author Ciro Álvarez Garrido
+     * @since v1.0
+     */
+    private void executeDelete(String[] arguments) {
+        try {
+            String id = getArgumentValue(arguments, 0, "borrar");
+            long parsedId;
+            try {
+                parsedId = Long.parseLong(id);
+            } catch (NumberFormatException exception) {
+                System.err.println(ConsoleStatus.ERROR + " El valor del argumento \"" + id + "\" no es un número válido.");
+                return;
+            }
+            service.delete(parsedId);
+            System.out.println(ConsoleStatus.INFO + " La candidatura con identificador \"" + parsedId + "\" ha sido eliminada.");
+        } catch (IllegalArgumentException exception) {
+            System.err.println(exception.getMessage());
+        } catch (IdNotFoundException exception) {
+            System.err.println(ConsoleStatus.ERROR + " " + exception.getMessage());
+        }
+    }
+
+    /**
      * Esta función obtiene el valor que le pertenece a un argumento de la línea de comandos.
      *
      * @param arguments el array de argumentos de la línea de comandos.
