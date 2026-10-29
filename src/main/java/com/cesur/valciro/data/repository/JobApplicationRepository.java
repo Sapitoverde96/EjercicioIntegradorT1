@@ -89,7 +89,7 @@ public class JobApplicationRepository {
         try {
             Files.writeString(path, "", StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException exception) {
-            throw new RuntimeException("Error al eliminar el fichero", exception);
+            throw new RuntimeException("Error al limpiar el fichero", exception);
         }
     }
 
