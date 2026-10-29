@@ -41,9 +41,9 @@ public class JobApplicationController {
             case "listar"-> executeList(arguments);
             case "añadir" -> executeAdd(arguments);
             case "ver" -> executeFind(arguments);
-            default -> {
-                System.err.println(ConsoleStatus.ERROR + " no se reconoce como un comando.");
-            }
+            case "borrar" -> executeDelete(arguments);
+            case "importar" -> executeImport(arguments);
+            default -> System.err.println(ConsoleStatus.ERROR + " no se reconoce como un comando.");
         }
     }
 
