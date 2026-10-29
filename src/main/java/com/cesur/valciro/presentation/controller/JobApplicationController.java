@@ -1,5 +1,6 @@
 package com.cesur.valciro.presentation.controller;
 
+import com.cesur.valciro.business.exception.IdNotFoundException;
 import com.cesur.valciro.business.service.JobApplicationService;
 import com.cesur.valciro.data.entity.JobApplicationEntity;
 
@@ -39,6 +40,7 @@ public class JobApplicationController {
         switch (argument) {
             case "listar"-> executeList(arguments);
             case "añadir" -> executeAdd(arguments);
+            case "ver" -> executeFind(arguments);
             default -> {
                 System.err.println(ConsoleStatus.ERROR + " no se reconoce como un comando.");
             }
@@ -126,8 +128,33 @@ public class JobApplicationController {
         }
     }
 
+    /**
+     * Esta función muestra en pantalla los detalles de una candidatura concreta especificada por un identificador a elección del usuario.
+     *
+     * @param arguments Los argumentos del comando.
+     * @author Ciro Álvarez Garrido
+     * @since 1.0
+     */
     private void executeFind(String[] arguments) {
-
+        try {
+            String id = getArgumentValue(arguments, 0, "ver");
+            long parsedId;
+            try {
+                parsedId = Long.parseLong(id);
+            } catch (NumberFormatException exception) {
+                System.err.println(ConsoleStatus.ERROR + " El valor del argumento \"" + id + "\" no es un número válido.");
+                return;
+            }
+            JobApplicationEntity entity = service.find(parsedId);
+            System.out.printf(
+                    "╭ Candidatura ID: %s\n│ ╭ Título: %s\n│ │ Estado: %s\n│ │ Empresa: %s\n│ ╰ Fecha: %s\n",
+                    entity.id(), entity.title(), entity.status(), entity.company(), entity.dateCreated()
+            );
+        } catch (IllegalArgumentException exception) {
+            System.err.println(exception.getMessage());
+        } catch (IdNotFoundException exception) {
+            System.err.println(ConsoleStatus.ERROR + " " + exception.getMessage());
+        }
     }
 
     /**
