@@ -65,9 +65,9 @@ public class JobApplicationService {
      * @since v1.0
      */
     public JobApplicationEntity add(String title, String status, String company, String date) {
-        checkField("title", title);
-        checkField("status", status);
-        checkField("company", company);
+        checkField("título", title);
+        checkField("estado", status);
+        checkField("empresa", company);
         checkDate(date);
         List<JobApplicationEntity> entities = repository.readFromCSV();
         for (JobApplicationEntity entity : entities) {
@@ -176,7 +176,7 @@ public class JobApplicationService {
      */
     private void checkField(String field, String value) {
         if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException("El campo " + field + " es nulo o está vacío");
+            throw new IllegalArgumentException("El campo \"" + field + "\" es nulo o está vacío");
         }
     }
 
@@ -189,7 +189,7 @@ public class JobApplicationService {
      * @since v1.0
      */
     private void checkDate(String date) {
-        checkField("date", date);
+        checkField("fecha", date);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         try {
             LocalDate.parse(date.trim(), formatter);

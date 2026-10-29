@@ -18,7 +18,7 @@ public enum JobApplicationStatus {
         try {
             return JobApplicationStatus.valueOf(status.trim().toUpperCase());
         } catch (IllegalArgumentException exception) {
-            throw new IllegalArgumentException(status + " no coincide con los estados aceptados: ACCEPTED, REJECTED, PENDING");
+            throw new IllegalArgumentException("\"" +status + "\" no coincide con los estados aceptados: ACCEPTED, REJECTED, PENDING");
         }
     }
 }

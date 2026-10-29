@@ -76,7 +76,7 @@ public class JobApplicationController {
             }
             List<JobApplicationEntity> entities = service.list(statFilter, compFilter);
             if (entities.isEmpty()) {
-                System.out.println("[" + ConsoleStatus.ERROR + "] No se han encontrado candidaturas.");
+                System.out.println("[" + ConsoleStatus.INFO + "] No se han encontrado candidaturas.");
                 return;
             }
             for (JobApplicationEntity entity : entities) {
@@ -86,7 +86,7 @@ public class JobApplicationController {
                 );
             }
         } catch (IllegalArgumentException exception) {
-            System.err.println(exception.getMessage());
+            System.err.println("[" + ConsoleStatus.ERROR + "] " + exception.getMessage());
         }
     }
 
@@ -154,7 +154,7 @@ public class JobApplicationController {
         } catch (IllegalArgumentException exception) {
             System.err.println(exception.getMessage());
         } catch (IdNotFoundException exception) {
-            System.err.println("[" + ConsoleStatus.ERROR + "] " + exception.getMessage());
+            System.err.println("[" + ConsoleStatus.INFO + "] " + exception.getMessage());
         }
     }
 
@@ -180,7 +180,7 @@ public class JobApplicationController {
         } catch (IllegalArgumentException exception) {
             System.err.println(exception.getMessage());
         } catch (IdNotFoundException exception) {
-            System.err.println("[" + ConsoleStatus.ERROR + "] " + exception.getMessage());
+            System.err.println("[" + ConsoleStatus.INFO + "] " + exception.getMessage());
         }
     }
 
@@ -193,7 +193,7 @@ public class JobApplicationController {
      */
     private void executeImport(String[] arguments) {
         try {
-            String fileCSV = getArgumentValue(arguments, 0, "import");
+            String fileCSV = getArgumentValue(arguments, 0, "importar");
             service.importFile(fileCSV);
             System.out.println("[" + ConsoleStatus.INFO + "] El fichero \"" + fileCSV + "\" se ha importado correctamente.");
         } catch (IllegalArgumentException exception) {
